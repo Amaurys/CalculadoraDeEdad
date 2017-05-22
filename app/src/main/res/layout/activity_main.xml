@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.sanchezamaurys.calculadoradeedad.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
 
     <TextView
         android:id="@+id/textView"
@@ -14,26 +15,29 @@
         android:layout_gravity="center"
         android:height="30dp"
         android:text="@string/tituloElegir"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="68dp" />
-    <DatePicker
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        android:id="@+id/myDatePicker"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvFechaNacimiento"
+        android:text="dia/mes/año"
+        android:textSize="30dp"
         android:layout_gravity="center"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tituloCalcaular"
-        android:id="@+id/btnCalcularEdad"
+        android:text="@string/tituloEscogerFecha"
+        android:id="@+id/btnSeleccionarDatePickerDialog"
         android:layout_gravity="center"/>
 
     <TextView
-        android:id="@+id/textViewEdadCalculada"
+        android:id="@+id/tvEdadCalculada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:height="40dp"
+        android:text="¡TU EDAD CALCULADA!"
         android:gravity="center" />
 
 </LinearLayout>

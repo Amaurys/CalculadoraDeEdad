@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Calculadora de Edad</string>
     <string name="tituloElegir">Elija su fecha de nacimiento</string>
-    <string name="tituloCalcaular">Calcular Edad</string>
+    <string name="tituloEscogerFecha">Escoger Fecha de Nacimiento</string>
 </resources>
