@@ -2,4 +2,12 @@
     <string name="app_name">Calculadora de Edad</string>
     <string name="tituloElegir">Elija su fecha de nacimiento</string>
     <string name="tituloEscogerFecha">Escoger Fecha de Nacimiento</string>
+    <string name="diaMesAño">DIA/MES/AÑO</string>
+    <string name="EdadCalculada">¡TU EDAD CALCULADA!</string>
+    <string name="NoExisteHistorico">No existe histórico de edad calculada.</string>
+    <string name="EscogerFecha">Escoger Fecha</string>
+    <string name="EdadRecientemente">Edad recientemente calculada</string>
+    <string name="NoHasCalculado">No has calculado tu edad.</string>
+    <string name="pnultimaEdad">Penúltima edad calculada</string>
+    <string name="cleanAll">Clean All</string>
 </resources>

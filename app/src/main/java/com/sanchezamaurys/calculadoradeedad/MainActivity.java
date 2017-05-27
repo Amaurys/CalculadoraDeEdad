@@ -5,11 +5,9 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.StringBuilderPrinter;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.SimpleExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +17,15 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private TextView tvFechaNacimiento, tvEdadCalculada;
+    private TextView tvBornDate, tvCalculatedAge, tvActualAge, tvPenultimeAge;
     private Calendar calendar;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat simpleDateFormat, simpleYearFormat, simpleMonthFormat, simpleDayFormat;
-    //AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+    ImageButton imgBtnRefreshAll;
 
+    int penultimateAge;
+    int ultimateAge = 0;
+    int diffAges;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -40,10 +41,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DATE));
 
-        tvFechaNacimiento = (TextView) findViewById(R.id.tvFechaNacimiento);
-        tvEdadCalculada = (TextView) findViewById(R.id.tvEdadCalculada);
+        tvBornDate = (TextView) findViewById(R.id.tvBornDate);
+        tvCalculatedAge = (TextView) findViewById(R.id.tvCalculatedAge);
+        tvActualAge = (TextView) findViewById(R.id.tvActualAge);
+        tvPenultimeAge = (TextView) findViewById(R.id.tvPenultimateAge);
 
-        findViewById(R.id.btnSeleccionarDatePickerDialog).setOnClickListener(this);
+        imgBtnRefreshAll = (ImageButton) findViewById(R.id.imgBtnRefreshAll);
+        imgBtnRefreshAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cleanAll();
+            }
+        });
+        findViewById(R.id.btnSelectDatePickerDialog).setOnClickListener(this);
     }
 
     @Override
@@ -63,40 +73,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     private void refreshDisplays(){
-        tvFechaNacimiento.setText(simpleDateFormat.format(calendar.getTime()));
+        tvBornDate.setText(simpleDateFormat.format(calendar.getTime()));
 
-        int currentYear = calendar.getInstance().get(Calendar.YEAR);
-        int currentMonth = calendar.getInstance().get(Calendar.MONTH);
-        int currentDay = calendar.getInstance().get(Calendar.DATE);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        int currentDay = Calendar.getInstance().get(Calendar.DATE);
 
         int bornYear =  Integer.parseInt(simpleYearFormat.format(calendar.getTime()));
         int bornMonth = Integer.parseInt(simpleMonthFormat.format(calendar.getTime()));
         int bornDay =  Integer.parseInt(simpleDayFormat.format(calendar.getTime()));
 
-        String actualAgeYear = Integer.toString(currentYear - bornYear);
-        int actualAgeMonth = 0;
-        int actualAgeDay = Math.abs(bornDay - currentDay);
+        int currentAgeYear = currentYear - bornYear;
+        int currentAgeMonth;
+        int currentAgeDay = Math.abs(bornDay - currentDay);
+
+
+
 
         if (bornYear >= currentYear){
             showDialog();
         }else{
-            tvEdadCalculada.setText(actualAgeYear);
+
+            tvCalculatedAge.setText(String.format(Locale.getDefault(),"%d",currentAgeYear));
 
             if (bornMonth > currentMonth){
 
-                actualAgeMonth = 13 - ((bornMonth - currentMonth));
+                currentAgeMonth = 13 - ((bornMonth - currentMonth));
 
-                if (actualAgeMonth == 12)
-                    actualAgeMonth = 0;
+                if (currentAgeMonth == 12)
+                    currentAgeMonth = 0;
 
-                tvEdadCalculada.setText(Integer.toString(Integer.parseInt(actualAgeYear) -1)
+                tvCalculatedAge.setText((currentAgeYear -1)
                                         +" años, "
-                                        +Integer.toString(actualAgeMonth) +" meses, "
-                                        +actualAgeDay +" días");
+                                        +Integer.toString(currentAgeMonth) +" meses, "
+                                        +currentAgeDay +" días");
+
+                calculateAges(currentAgeYear);
             }else {
-                actualAgeMonth = currentMonth - bornMonth;
-                tvEdadCalculada.append(" años, " + Integer.toString(actualAgeMonth) +" meses, "
-                                        +actualAgeDay +" días");
+                currentAgeMonth = currentMonth - bornMonth;
+                tvCalculatedAge.append(" años, " + Integer.toString(currentAgeMonth) +" meses, "
+                                        +currentAgeDay +" días");
+                calculateAges(currentAgeYear);
             }
         }
     }
@@ -104,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showDialog(){
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Alert");
-        alertDialog.setMessage("The born year can't be highest or equals to current year. ");
+        alertDialog.setMessage("El año en que naciste no puede ser mayor o igual que el alo actual. ");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -112,5 +129,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
         alertDialog.show();
+    }
+
+    public void cleanAll(){
+        tvBornDate.setText(R.string.diaMesAño);
+        tvActualAge.setText(R.string.EdadCalculada);
+        tvPenultimeAge.setText(R.string.NoExisteHistorico);
+
+        ultimateAge = 0;
+        penultimateAge= 0;
+    }
+
+    public void calculateAges(int currentAgeYear){
+        if (currentAgeYear == 0){
+            ultimateAge = currentAgeYear;
+            tvActualAge.setText(String.format(Locale.getDefault(),"$%d",ultimateAge));
+
+        }else{
+            penultimateAge = ultimateAge;
+            ultimateAge = currentAgeYear;
+
+            tvPenultimeAge.setText(String.format(Locale.getDefault(),"%d",penultimateAge));
+            tvActualAge.setText(String.format(Locale.getDefault(),"%d",ultimateAge));
+
+            if (ultimateAge > penultimateAge && penultimateAge > 0){
+                diffAges = ultimateAge - penultimateAge;
+                String msn = "Eres "+diffAges+"años mayor que el usuario anterior.";
+                Toast.makeText(this,msn,Toast.LENGTH_LONG).show();
+            }else{
+                if (penultimateAge > ultimateAge){
+                    diffAges = penultimateAge - ultimateAge;
+                    String msn = "Eres "+diffAges+" años menor que el usuario anterior.";
+                    Toast.makeText(this,msn,Toast.LENGTH_LONG).show();
+                }else {
+                    if (ultimateAge == penultimateAge){
+                        String msn = "Los dos últimos usuarios consultados son de la misma edad.";
+                        Toast.makeText(this,msn,Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
     }
 }
