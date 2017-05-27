@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int penultimateAge;
     int ultimateAge = 0;
     int diffAges;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -88,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int currentAgeDay = Math.abs(bornDay - currentDay);
 
 
-
-
         if (bornYear >= currentYear){
             showDialog();
         }else{
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (bornMonth > currentMonth){
 
-                currentAgeMonth = 13 - ((bornMonth - currentMonth));
+                currentAgeMonth = 13 - (bornMonth - currentMonth);
 
                 if (currentAgeMonth == 12)
                     currentAgeMonth = 0;
@@ -131,10 +130,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alertDialog.show();
     }
 
+
     public void cleanAll(){
         tvBornDate.setText(R.string.diaMesAño);
-        tvActualAge.setText(R.string.EdadCalculada);
+        tvActualAge.setText(R.string.NoHasCalculado);
         tvPenultimeAge.setText(R.string.NoExisteHistorico);
+        tvCalculatedAge.setText(R.string.EdadCalculada);
 
         ultimateAge = 0;
         penultimateAge= 0;
